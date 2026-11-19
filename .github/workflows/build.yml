@@ -1,0 +1,21 @@
+name: Build and self-test (.NET 8 / Windows)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore
+        run: dotnet restore ChatAutomation/ChatAutomation.csproj
+      - name: Build
+        run: dotnet build ChatAutomation/ChatAutomation.csproj -c Release --no-restore
+      - name: Self-test
+        run: dotnet run --project ChatAutomation/ChatAutomation.csproj -c Release --no-build -- self-test

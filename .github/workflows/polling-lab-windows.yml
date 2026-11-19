@@ -1,0 +1,28 @@
+name: PollingLab Windows build
+
+on:
+  push:
+    branches:
+      - test/isbusy-polling-three-messages
+  pull_request:
+    paths:
+      - 'tests/ChatAutomation.PollingLab/**'
+      - 'ChatAutomation/**'
+      - 'polling-lab.ps1'
+      - '.github/workflows/polling-lab-windows.yml'
+
+jobs:
+  polling-lab:
+    runs-on: windows-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore
+        run: dotnet restore tests/ChatAutomation.PollingLab/ChatAutomation.PollingLab.csproj
+      - name: Build
+        run: dotnet build tests/ChatAutomation.PollingLab/ChatAutomation.PollingLab.csproj -c Release --no-restore
+      - name: Self-test (no Edge and no send)
+        run: dotnet run --project tests/ChatAutomation.PollingLab/ChatAutomation.PollingLab.csproj -c Release --no-build -- --mode self-test

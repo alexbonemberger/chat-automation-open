@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+*.log
+*.zip
+TestResults/
+chats.json
+settings.json
+current-binded-chat.json
+.env
+.env.*
